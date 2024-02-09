@@ -1,0 +1,510 @@
+{% extends 'bawaslu/base.html' %} {% load static %} {% block content %}
+<!--Load Tailwind-->
+{% load tailwind_filters %}
+<div>
+	<div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+		<h2 class="text-xl">{{title_page}}</h2>
+	</div>
+	<div class="relative flex h-full gap-5 sm:h-[calc(100vh_-_150px)]">
+		<div
+			class="panel absolute z-10 hidden h-full w-[240px] max-w-full flex-none space-y-4 p-4 xl:relative xl:block xl:h-auto ltr:rounded-r-none ltr:xl:rounded-r-md rtl:rounded-l-none rtl:xl:rounded-l-md"
+			:class="{'!block':isShowTaskMenu}">
+			<div class="flex h-full flex-col pb-16">
+				<div class="pb-5">
+					<div class="flex items-center text-center">
+						<div class="shrink-0">
+							<svg
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5">
+								<path
+									opacity="0.5"
+									d="M16 4.00195C18.175 4.01406 19.3529 4.11051 20.1213 4.87889C21 5.75757 21 7.17179 21 10.0002V16.0002C21 18.8286 21 20.2429 20.1213 21.1215C19.2426 22.0002 17.8284 22.0002 15 22.0002H9C6.17157 22.0002 4.75736 22.0002 3.87868 21.1215C3 20.2429 3 18.8286 3 16.0002V10.0002C3 7.17179 3 5.75757 3.87868 4.87889C4.64706 4.11051 5.82497 4.01406 8 4.00195"
+									stroke="currentColor"
+									stroke-width="1.5" />
+								<path
+									d="M8 14H16"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-linecap="round" />
+								<path
+									d="M7 10.5H17"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-linecap="round" />
+								<path
+									d="M9 17.5H15"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-linecap="round" />
+								<path
+									d="M8 3.5C8 2.67157 8.67157 2 9.5 2H14.5C15.3284 2 16 2.67157 16 3.5V4.5C16 5.32843 15.3284 6 14.5 6H9.5C8.67157 6 8 5.32843 8 4.5V3.5Z"
+									stroke="currentColor"
+									stroke-width="1.5" />
+							</svg>
+						</div>
+						<h3 class="text-lg font-semibold ltr:ml-3 rtl:mr-3">Kecamatan</h3>
+					</div>
+				</div>
+				<div
+					class="mb-5 h-px w-full border-b border-[#e0e6ed] dark:border-[#1b2e4b]"></div>
+				<div class="perfect-scrollbar relative -mr-3.5 h-full grow pr-3.5">
+					<div class="space-y-1">
+						{% for kec in kecamatans %}
+						<a
+							href="{% url 'bawaslu:PerolehanDPRDPROVKecamatanView' kec.id %}"
+							class="flex h-10 w-full items-center justify-between rounded-md p-2 font-medium hover:bg-white-dark/10 hover:text-primary dark:hover:bg-[#181F32] dark:hover:text-primary"
+							:class="{ 'bg-gray-100 dark:text-primary text-primary dark:bg-[#181F32]': selectedTab === '' }"
+							@click="tabChanged('')">
+							<div class="flex items-center">
+								<svg
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-4.5 w-4.5 shrink-0">
+									<path
+										d="M2 5.5L3.21429 7L7.5 3"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+										stroke-linejoin="round" />
+									<path
+										opacity="0.5"
+										d="M2 12.5L3.21429 14L7.5 10"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+										stroke-linejoin="round" />
+									<path
+										d="M2 19.5L3.21429 21L7.5 17"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+										stroke-linejoin="round" />
+									<path
+										d="M22 19L12 19"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round" />
+									<path
+										opacity="0.5"
+										d="M22 12L12 12"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round" />
+									<path
+										d="M22 5L12 5"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round" />
+								</svg>
+								<div class="ltr:ml-3 rtl:mr-3">{{kec.name}}</div>
+							</div>
+						</a>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel h-full flex-1 overflow-auto p-0">
+			<div class="border-collapse">
+				<table class="table-hover">
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>Provinsi</th>
+							<th>Kab/Kota</th>
+							<th>Kecamatan</th>
+							<th>Desa</th>
+							<th>TPS</th>
+							<th>Jumlah Berkas</th>
+							<th>Aksi</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for item in users %}
+						<tr>
+							<td>
+								<div class="flex w-max items-center">{{forloop.counter}}</div>
+							</td>
+							<td>{{item.provinsi}}</td>
+							<td class="whitespace-nowrap">{{item.kabkota}}</td>
+							<td class="whitespace-nowrap">{{item.kecamatan}}</td>
+							<td class="whitespace-nowrap">{{item.keldesa}}</td>
+							<td class="whitespace-nowrap">{{item.tps}}</td>
+							<td class="whitespace-nowrap">
+								{% if item.dprdprov.count == max_foto %}
+								<span class="badge bg-success">Lengkap</span>
+
+								<!-- comment -->
+								{% elif item.dprdprov.count == 0 %}
+								<span class="badge bg-danger">Belum Upload</span>
+								<!-- comment -->
+								{% else %}
+								<span class="badge bg-warning"
+									>Upload {{item.dprdprov.count}} hal</span
+								>
+								{%endif %}
+							</td>
+							<td>
+								<div
+									x-data="dropdown"
+									@click.outside="open = false"
+									class="dropdown w-max">
+									<a href="javascript:;" class="inline-block" @click="toggle">
+										<svg
+											class="m-auto h-5 w-5 opacity-70"
+											viewBox="0 0 24 24"
+											fill="none"
+											xmlns="http://www.w3.org/2000/svg">
+											<circle
+												cx="5"
+												cy="12"
+												r="2"
+												stroke="currentColor"
+												stroke-width="1.5"></circle>
+											<circle
+												opacity="0.5"
+												cx="12"
+												cy="12"
+												r="2"
+												stroke="currentColor"
+												stroke-width="1.5"></circle>
+											<circle
+												cx="19"
+												cy="12"
+												r="2"
+												stroke="currentColor"
+												stroke-width="1.5"></circle>
+										</svg>
+									</a>
+									<ul
+										x-cloak
+										x-show="open"
+										x-transition
+										x-transition.duration.300ms
+										class="ltr:right-0 rtl:left-0">
+										<li>
+											<a
+												href="{% url 'bawaslu:PerolehanDPRDPROVDetailView' item.id %}"
+												>Lihat</a
+											>
+										</li>
+										<li>
+											<a href="#">Unduh</a>
+										</li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<ul class="m-auto inline-flex items-center space-x-1 rtl:space-x-reverse">
+				{% if ptps.has_previous %}
+				<li>
+					<a
+						href="?page={{ptps.previous_page_number}}"
+						class="flex justify-center rounded bg-white-light px-3.5 py-2 font-semibold text-dark transition hover:bg-primary hover:text-white dark:bg-[#191e3a] dark:text-white-light dark:hover:bg-primary">
+						Sebelumnya
+					</a>
+				</li>
+				{% endif %} {% for pg in page_range %} {% if ptps.number == pg %}
+				<li>
+					<a
+						href="?page={{pg}}"
+						class="flex justify-center rounded bg-white-light px-3.5 py-2 font-semibold text-dark transition hover:bg-primary hover:text-white dark:bg-[#191e3a] dark:text-white-light dark:hover:bg-primary">
+						{{pg}}
+					</a>
+				</li>
+				{% endif %} {% endfor %} {% if ptps.has_next %}
+
+				<li>
+					<a
+						href="?page={{ptps.next_page_number}}"
+						class="flex justify-center rounded bg-white-light px-3.5 py-2 font-semibold text-dark transition hover:bg-primary hover:text-white dark:bg-[#191e3a] dark:text-white-light dark:hover:bg-primary">
+						Selanjutnya
+					</a>
+				</li>
+				{% endif %}
+			</ul>
+		</div>
+
+		<div
+			class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60 px-4"
+			:class="{'!block':addTaskModal}">
+			<div class="flex min-h-screen items-center justify-center">
+				<div
+					x-show="addTaskModal"
+					x-transition
+					x-transition.duration.300
+					@click.outside="addTaskModal = false"
+					class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full">
+					<button
+						type="button"
+						class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+						@click="addTaskModal = false">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24px"
+							height="24px"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="h-6 w-6">
+							<line x1="18" y1="6" x2="6" y2="18"></line>
+							<line x1="6" y1="6" x2="18" y2="18"></line>
+						</svg>
+					</button>
+					<div
+						class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+						x-text="params.id ? 'Edit Task' : 'Add Task'"></div>
+					<div class="p-5">
+						<form @submit.prevent="saveTask">
+							<div class="mb-5">
+								<label for="title">Title</label>
+								<input
+									id="title"
+									type="text"
+									placeholder="Enter Task Title"
+									class="form-input"
+									x-model="params.title" />
+							</div>
+							<div class="mb-5">
+								<label for="assignee">Assignee</label>
+								<select
+									id="assignee"
+									class="form-select"
+									x-model="params.assignee">
+									<option value="">Select Assignee</option>
+									<option value="John Smith">John Smith</option>
+									<option value="Kia Vega">Kia Vega</option>
+									<option value="Sandy Doe">Sandy Doe</option>
+									<option value="Jane Foster">Jane Foster</option>
+									<option value="Donna Frank">Donna Frank</option>
+								</select>
+							</div>
+							<div class="mb-5 flex justify-between gap-4">
+								<div class="flex-1">
+									<label for="tag">Tag</label>
+									<select id="tag" class="form-select" x-model="params.tag">
+										<option value="">Select Tag</option>
+										<option value="team">Team</option>
+										<option value="update">Update</option>
+									</select>
+								</div>
+								<div class="flex-1">
+									<label for="priority">Priority</label>
+									<select
+										id="priority"
+										class="form-select"
+										x-model="params.priority">
+										<option value="">Select Priority</option>
+										<option value="low">Low</option>
+										<option value="medium">Medium</option>
+										<option value="high">High</option>
+									</select>
+								</div>
+							</div>
+							<div class="mb-5">
+								<label>Description</label>
+								<div x-ref="editor"></div>
+							</div>
+							<div
+								class="mt-8 flex items-center justify-end ltr:text-right rtl:text-left">
+								<button
+									type="button"
+									class="btn btn-outline-danger"
+									@click="addTaskModal = false">
+									Cancel
+								</button>
+								<button
+									type="submit"
+									class="btn btn-primary ltr:ml-4 rtl:mr-4"
+									x-text="params.id ? 'Update' : 'Add'">
+									Add
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div
+			class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60"
+			:class="{'!block':viewTaskModal}">
+			<div
+				class="flex min-h-screen items-center justify-center px-4"
+				@click.self="viewTaskModal = false">
+				<div
+					x-show="viewTaskModal"
+					x-transition
+					x-transition.duration.300
+					class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full">
+					<button
+						type="button"
+						class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+						@click="viewTaskModal = false">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24px"
+							height="24px"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="h-6 w-6">
+							<line x1="18" y1="6" x2="6" y2="18"></line>
+							<line x1="6" y1="6" x2="18" y2="18"></line>
+						</svg>
+					</button>
+					<div
+						class="flex flex-wrap items-center gap-2 bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]">
+						<div x-text="selectedTask.title"></div>
+						<div
+							x-show="selectedTask.priority"
+							x-text="selectedTask.priority"
+							class="badge rounded-3xl capitalize"
+							:class="{
+						'badge-outline-primary': selectedTask.priority === 'medium',
+						'badge-outline-warning ': selectedTask.priority === 'low',
+						'badge-outline-danger ': selectedTask.priority === 'high',
+					}"></div>
+
+						<div
+							x-show="selectedTask.tag"
+							x-text="selectedTask.tag"
+							class="badge rounded-3xl capitalize"
+							:class="{
+						'badge-outline-success ': selectedTask.tag === 'team',
+						'badge-outline-info ': selectedTask.tag === 'update',
+					}"></div>
+					</div>
+					<div class="p-5">
+						<div
+							class="prose text-base"
+							x-html="selectedTask.description"></div>
+
+						<div class="mt-8 flex items-center justify-end">
+							<button
+								type="button"
+								class="btn btn-outline-danger"
+								@click="viewTaskModal = false">
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- script -->
+<script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+<script>
+	document.addEventListener("alpine:init", () => {
+		Alpine.data("modal", (initialOpenState = false) => ({
+			open: initialOpenState,
+
+			toggle() {
+				this.open = !this.open;
+			},
+		}));
+	});
+</script>
+<script>
+	$(document).ready(function () {
+		$("#id_provinsi").change(function () {
+			var provinsiId = $(this).val();
+			$.ajax({
+				url: "../../get_kabkota/",
+				data: { provinsi_id: provinsiId },
+				dataType: "json",
+				success: function (data) {
+					var options = '<option value="">Pilih Kabupaten/Kota</option>';
+					for (var i = 0; i < data.length; i++) {
+						options +=
+							'<option value="' +
+							data[i].id +
+							'">' +
+							data[i].name +
+							"</option>";
+					}
+					$("#id_kabkota").html(options);
+				},
+			});
+		});
+		$("#id_kabkota").change(function () {
+			var kabkotaId = $(this).val();
+			$.ajax({
+				url: "../../get_kecamatan/",
+				data: { kabkota_id: kabkotaId },
+				dataType: "json",
+				success: function (data) {
+					var options = '<option value="">Pilih Kecamatan</option>';
+					for (var i = 0; i < data.length; i++) {
+						options +=
+							'<option value="' +
+							data[i].id +
+							'">' +
+							data[i].name +
+							"</option>";
+					}
+					$("#id_kecamatan").html(options);
+				},
+			});
+		});
+		$("#id_kecamatan").change(function () {
+			var kecamatanId = $(this).val();
+			$.ajax({
+				url: "../../get_keldesa/",
+				data: { kecamatan_id: kecamatanId },
+				dataType: "json",
+				success: function (data) {
+					var options = '<option value="">Pilih Kelurahan/Desa</option>';
+					for (var i = 0; i < data.length; i++) {
+						options +=
+							'<option value="' +
+							data[i].id +
+							'">' +
+							data[i].name +
+							"</option>";
+					}
+					$("#id_keldesa").html(options);
+				},
+			});
+		});
+
+		$("#id_keldesa").change(function () {
+			var keldesaId = $(this).val();
+			$.ajax({
+				url: "../../get_tps/",
+				data: { keldesa_id: keldesaId },
+				dataType: "json",
+				success: function (data) {
+					var options = '<option value="">Pilih Nomor TPS</option>';
+					for (var i = 0; i < data.length; i++) {
+						options +=
+							'<option value="' + data[i].id + '">' + data[i].no + "</option>";
+					}
+					$("#id_tps").html(options);
+				},
+			});
+		});
+	});
+</script>
+
+{% endblock %}

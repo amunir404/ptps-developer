@@ -1,0 +1,298 @@
+{% extends 'ptps/base.html' %} {% load static %} {% block content %}
+
+<div
+	class="-m-6 overflow-hidden rounded-none border border-gray-200 bg-white shadow-none lg:m-6 lg:rounded-lg lg:shadow-md">
+	<div class="relative">
+		<div class="flex items-center px-6 py-4">
+			<h3 class="text-xl font-bold md:text-3xl">Layanan Bawaslu</h3>
+		</div>
+		<div
+			class="mx-auto max-w-7xl items-center justify-between bg-white p-4 py-6 sm:px-0 lg:px-8">
+			<div class="grid grid-cols-3 gap-6">
+				<div class="mb-5 cursor-pointer" x-data="report_whether">
+					<div
+						@click="report_whether"
+						class="group relative hidden gap-4 rounded-lg border bg-white p-4 hover:bg-gray-50 lg:flex">
+						<div
+							class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50">
+							<div class="h-10 w-10">
+								<img src="{% static 'images/icon/weather.png' %}" alt="" />
+							</div>
+						</div>
+						<div>
+							<h4 class="text-base font-semibold tracking-tight text-slate-800">
+								Lapor Cuaca
+							</h4>
+
+							<p class="line-clamp-1 text-xs text-gray-600">
+								Hujan dan Mendung Segera Laporkan.
+							</p>
+						</div>
+					</div>
+					<div class="flex flex-col items-center lg:hidden">
+						<div class="" @click="report_whether">
+							<img
+								src="{% static 'images/icon/weather.png' %}"
+								class="h-12 w-12 text-white"
+								aria-hidden="true" />
+						</div>
+						<div class="mt-1 text-center text-sm">Lapor Cuaca</div>
+					</div>
+					{% include "ptps/report_whether.html" %}
+				</div>
+				<div class="mb-5 cursor-pointer" x-data="report_start">
+					<div
+						@click="report_start"
+						class="group relative hidden gap-4 rounded-lg border bg-white p-4 hover:bg-gray-50 lg:flex">
+						<div
+							class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50">
+							<div class="h-10 w-10">
+								<img src="{% static 'images/icon/start.png' %}" alt="" />
+							</div>
+						</div>
+						<div>
+							<h4 class="text-base font-semibold tracking-tight text-slate-800">
+								Lapor Mulai
+							</h4>
+
+							<p class="line-clamp-1 text-xs text-gray-600">
+								Pemungutan Suara Sudah dimulai Segera Laporkan.
+							</p>
+						</div>
+					</div>
+					<div class="flex flex-col items-center lg:hidden">
+						<div class="" @click="report_start">
+							<img
+								src="{% static 'images/icon/start.png' %}"
+								class="h-12 w-12 text-white"
+								aria-hidden="true" />
+						</div>
+						<div class="mt-1 text-center text-sm">Lapor Mulai</div>
+					</div>
+					{% include "ptps/report_start.html" %}
+				</div>
+				<div class="mb-5 cursor-pointer" x-data="report_end">
+					<div
+						@click="report_end"
+						class="group relative hidden gap-4 rounded-lg border bg-white p-4 hover:bg-gray-50 lg:flex">
+						<div
+							class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50">
+							<div class="h-10 w-10">
+								<img src="{% static 'images/icon/finish.png' %}" alt="" />
+							</div>
+						</div>
+						<div>
+							<h4 class="text-base font-semibold tracking-tight text-slate-800">
+								Lapor Selesai
+							</h4>
+
+							<p class="line-clamp-1 text-xs text-gray-600">
+								Pemungutan Suara Sudah berakhir Segera Laporkan.
+							</p>
+						</div>
+					</div>
+					<div class="flex flex-col items-center lg:hidden">
+						<div class="" @click="report_end">
+							<img
+								src="{% static 'images/icon/finish.png' %}"
+								class="h-12 w-12 text-white"
+								aria-hidden="true" />
+						</div>
+						<div class="mt-1 text-center text-sm">Lapor Selesai</div>
+					</div>
+					{% include "ptps/report_end.html" %}
+				</div>
+				<a class="mb-5 cursor-pointer" href="{% url 'ptps:LhpView' %}">
+					<div
+						class="group relative hidden gap-4 rounded-lg border bg-white p-4 hover:bg-gray-50 lg:flex">
+						<div
+							class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50">
+							<div class="h-10 w-10">
+								<img src="{% static 'images/icon/report.png' %}" alt="" />
+							</div>
+						</div>
+						<div>
+							<h4 class="text-base font-semibold tracking-tight text-slate-800">
+								Laporan Hasil Pengawasan
+							</h4>
+
+							<p class="line-clamp-1 text-xs text-gray-600">
+								Setiap Pengawasan wajib dilaporkan
+							</p>
+						</div>
+					</div>
+					<div class="flex flex-col items-center lg:hidden">
+						<div class="">
+							<img
+								src="{% static 'images/icon/report.png' %}"
+								class="h-12 w-12 text-white"
+								aria-hidden="true" />
+						</div>
+						<div class="mt-1 text-center text-sm">Laporan Hasil Pengawasan</div>
+					</div>
+				</a>
+				<a
+					class="mb-5 cursor-pointer"
+					href="{% url 'ptps:PerolehanPresidenView' %}">
+					<div
+						class="group relative hidden gap-4 rounded-lg border bg-white p-4 hover:bg-gray-50 lg:flex">
+						<div
+							class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50">
+							<div class="h-10 w-10">
+								<img src="{% static 'images/icon/presiden.png' %}" alt="" />
+							</div>
+						</div>
+						<div>
+							<h4 class="text-base font-semibold tracking-tight text-slate-800">
+								Rekapitulasi Presiden
+							</h4>
+
+							<p class="line-clamp-1 text-xs text-gray-600">
+								Rekapitulasi Perolehan Suara Presiden
+							</p>
+						</div>
+					</div>
+					<div class="flex flex-col items-center lg:hidden">
+						<div class="">
+							<img
+								src="{% static 'images/icon/presiden.png' %}"
+								class="h-12 w-12 text-white"
+								aria-hidden="true" />
+						</div>
+						<div class="mt-1 text-center text-sm">Rekapitulasi Presiden</div>
+					</div>
+				</a>
+				<a
+					class="mb-5 cursor-pointer"
+					href="{% url 'ptps:PerolehanDprRiView' %}">
+					<div
+						class="group relative hidden gap-4 rounded-lg border bg-white p-4 hover:bg-gray-50 lg:flex">
+						<div
+							class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50">
+							<div class="h-10 w-10">
+								<img src="{% static 'images/icon/dpr.png' %}" alt="" />
+							</div>
+						</div>
+						<div>
+							<h4 class="text-base font-semibold tracking-tight text-slate-800">
+								Rekapitulasi DPR RI
+							</h4>
+
+							<p class="line-clamp-1 text-xs text-gray-600">
+								Rekapitulasi Perolehan Suara DPR RI
+							</p>
+						</div>
+					</div>
+					<div class="flex flex-col items-center lg:hidden">
+						<div class="">
+							<img
+								src="{% static 'images/icon/dpr.png' %}"
+								class="h-12 w-12 text-white"
+								aria-hidden="true" />
+						</div>
+						<div class="mt-1 text-center text-sm">Rekapitulasi DPR RI</div>
+					</div>
+				</a>
+				<a
+					class="mb-5 cursor-pointer"
+					href="{% url 'ptps:PerolehanDpdRiView' %}">
+					<div
+						class="group relative hidden gap-4 rounded-lg border bg-white p-4 hover:bg-gray-50 lg:flex">
+						<div
+							class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50">
+							<div class="h-10 w-10">
+								<img src="{% static 'images/icon/dpd.png' %}" alt="" />
+							</div>
+						</div>
+						<div>
+							<h4 class="text-base font-semibold tracking-tight text-slate-800">
+								Rekapitulasi DPD RI
+							</h4>
+
+							<p class="line-clamp-1 text-xs text-gray-600">
+								Rekapitulasi Perolehan Suara DPD RI
+							</p>
+						</div>
+					</div>
+					<div class="flex flex-col items-center lg:hidden">
+						<div class="">
+							<img
+								src="{% static 'images/icon/dpd.png' %}"
+								class="h-12 w-12 text-white"
+								aria-hidden="true" />
+						</div>
+						<div class="mt-1 text-center text-sm">Rekapitulasi DPD RI</div>
+					</div>
+				</a>
+				<a
+					class="mb-5 cursor-pointer"
+					href="{% url 'ptps:PerolehanDprdProvView' %}">
+					<div
+						class="group relative hidden gap-4 rounded-lg border bg-white p-4 hover:bg-gray-50 lg:flex">
+						<div
+							class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50">
+							<div class="h-10 w-10">
+								<img src="{% static 'images/icon/dprdprov.png' %}" alt="" />
+							</div>
+						</div>
+						<div>
+							<h4 class="text-base font-semibold tracking-tight text-slate-800">
+								Rekapitulasi DPRD Provinsi
+							</h4>
+
+							<p class="line-clamp-1 text-xs text-gray-600">
+								Rekapitulasi Perolehan Suara DPRD Provinsi
+							</p>
+						</div>
+					</div>
+					<div class="flex flex-col items-center lg:hidden">
+						<div class="">
+							<img
+								src="{% static 'images/icon/dprdprov.png' %}"
+								class="h-12 w-12 text-white"
+								aria-hidden="true" />
+						</div>
+						<div class="mt-1 text-center text-sm">
+							Rekapitulasi DPRD Provinsi
+						</div>
+					</div>
+				</a>
+				<a
+					class="mb-5 cursor-pointer"
+					href="{% url 'ptps:PerolehanDprdKabKotaView' %}">
+					<div
+						class="group relative hidden gap-4 rounded-lg border bg-white p-4 hover:bg-gray-50 lg:flex">
+						<div
+							class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50">
+							<div class="h-10 w-10">
+								<img src="{% static 'images/icon/dprdkab.png' %}" alt="" />
+							</div>
+						</div>
+						<div>
+							<h4 class="text-base font-semibold tracking-tight text-slate-800">
+								Rekapitulasi DPRD Kab/Kota
+							</h4>
+
+							<p class="line-clamp-1 text-xs text-gray-600">
+								Rekapitulasi Perolehan Suara DPRD Kab/Kota
+							</p>
+						</div>
+					</div>
+					<div class="flex flex-col items-center lg:hidden">
+						<div class="">
+							<img
+								src="{% static 'images/icon/dprdkab.png' %}"
+								class="h-12 w-12 text-white"
+								aria-hidden="true" />
+						</div>
+						<div class="mt-1 text-center text-sm">
+							Rekapitulasi DPRD Kab/Kota
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

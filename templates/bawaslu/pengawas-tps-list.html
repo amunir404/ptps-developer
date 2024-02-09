@@ -1,0 +1,342 @@
+{% extends 'bawaslu/base.html' %} {% load static %} {% block content %}
+<!--Load Tailwind-->
+{% load tailwind_filters %}
+<div>
+	<div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+		<h2 class="text-xl">{{title_page}}</h2>
+		<div
+			class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
+			<div class="flex gap-3" x-data="modal">
+				<div>
+					<button
+						type="button"
+						class="btn btn-primary hidden lg:flex"
+						@click="toggle">
+						<svg
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-5 w-5 ltr:mr-2 rtl:ml-2">
+							<circle
+								cx="10"
+								cy="6"
+								r="4"
+								stroke="currentColor"
+								stroke-width="1.5" />
+							<path
+								opacity="0.5"
+								d="M18 17.5C18 19.9853 18 22 10 22C2 22 2 19.9853 2 17.5C2 15.0147 5.58172 13 10 13C14.4183 13 18 15.0147 18 17.5Z"
+								stroke="currentColor"
+								stroke-width="1.5" />
+							<path
+								d="M21 10H19M19 10H17M19 10L19 8M19 10L19 12"
+								stroke="currentColor"
+								stroke-width="1.5"
+								stroke-linecap="round" />
+						</svg>
+						Tambah User
+					</button>
+					<button
+						type="button"
+						class="btn btn-primary fixed bottom-6 z-50 mb-20 lg:hidden ltr:right-6 rtl:left-6"
+						@click="toggle">
+						<svg
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-5 w-5 ltr:mr-2 rtl:ml-2">
+							<circle
+								cx="10"
+								cy="6"
+								r="4"
+								stroke="currentColor"
+								stroke-width="1.5" />
+							<path
+								opacity="0.5"
+								d="M18 17.5C18 19.9853 18 22 10 22C2 22 2 19.9853 2 17.5C2 15.0147 5.58172 13 10 13C14.4183 13 18 15.0147 18 17.5Z"
+								stroke="currentColor"
+								stroke-width="1.5" />
+							<path
+								d="M21 10H19M19 10H17M19 10L19 8M19 10L19 12"
+								stroke="currentColor"
+								stroke-width="1.5"
+								stroke-linecap="round" />
+						</svg>
+						Tambah User
+					</button>
+				</div>
+				<!-- modal -->
+
+				<div
+					class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60"
+					:class="open && '!block'">
+					<div class="flex min-h-screen items-start justify-center px-4">
+						<div
+							x-show="open"
+							x-transition
+							x-transition.duration.300
+							class="panel my-8 w-full max-w-lg overflow-hidden rounded-lg border-0 p-0">
+							<div
+								class="flex items-center justify-between bg-[#fbfbfb] px-5 py-3 dark:bg-[#121c2c]">
+								<div class="text-lg font-bold">Tambah {{title_page}}</div>
+								<button
+									type="button"
+									class="text-white-dark hover:text-dark"
+									@click="toggle">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24px"
+										height="24px"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										class="h-6 w-6">
+										<line x1="18" y1="6" x2="6" y2="18"></line>
+										<line x1="6" y1="6" x2="18" y2="18"></line>
+									</svg>
+								</button>
+							</div>
+							<div class="p-5">
+								<form
+									action="{% url 'bawaslu:UserPengawasTPSView' %}"
+									method="POST">
+									{% csrf_token %}
+									<div class="mb-5">{{ form|crispy }}{{ s_form|crispy }}</div>
+									<div class="mt-8 flex items-center justify-end">
+										<button
+											type="button"
+											class="btn btn-outline-danger"
+											@click="toggle">
+											Cancel
+										</button>
+										<button class="btn btn-primary ltr:ml-4 rtl:mr-4">
+											Tambah
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel mb-5 border-[#e0e6ed] px-0 dark:border-[#1b2e4b]">
+		<div class="px-5">
+			<div class="md:top-5 ltr:md:left-5 rtl:md:right-5">
+				<div class="mb-5 flex items-center gap-2">
+					<a href="#" class="btn btn-primary gap-2">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24px"
+							height="24px"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="h-5 w-5">
+							<line x1="12" y1="5" x2="12" y2="19"></line>
+							<line x1="5" y1="12" x2="19" y2="12"></line>
+						</svg>
+						Isi Dengan Search
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="border-collapse overflow-auto">
+			<table class="table-hover">
+				<thead>
+					<tr>
+						<th>Nama</th>
+						<th>Kab/Kota</th>
+						<th>Kecamatan</th>
+						<th>Desa</th>
+						<th>TPS</th>
+						<th class="!text-center">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in ptps %}
+					<tr>
+						<td>
+							<div class="flex w-max items-center">
+								<div class="w-max">
+									{% if item.avatar %}
+									<img
+										class="h-8 w-8 rounded-full object-cover ltr:mr-2 rtl:ml-2"
+										src="{{item.avatar.url}}"
+										alt="image" />
+
+									{% else %}
+									<img
+										class="h-8 w-8 rounded-full object-cover ltr:mr-2 rtl:ml-2"
+										src="https://ui-avatars.com/api/?name={{ user.fullname|urlencode }}&background=random"
+										alt="user" />
+									{% endif %}
+								</div>
+
+								<div>{{item.fullname}}</div>
+							</div>
+						</td>
+						<td>{{item.userpengawastps.kabkota.name}}</td>
+						<td class="whitespace-nowrap">
+							{{item.userpengawastps.kecamatan.name}}
+						</td>
+						<td class="whitespace-nowrap">
+							{{item.userpengawastps.keldesa.name}}
+						</td>
+						<td class="whitespace-nowrap">{{item.userpengawastps.tps}}</td>
+						<td>
+							<div class="flex items-center justify-center gap-4">
+								<button type="button" class="btn btn-sm btn-outline-primary">
+									Edit
+								</button>
+								<a
+									href=""
+									onclick="return confirm('Kamu yakin hapus user {{item.fullname}}?')"
+									class="btn btn-sm btn-outline-danger">
+									Delete
+								</a>
+							</div>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<ul class="m-auto inline-flex items-center space-x-1 rtl:space-x-reverse">
+		{% if ptps.has_previous %}
+		<li>
+			<a
+				href="?page={{ptps.previous_page_number}}"
+				class="flex justify-center rounded bg-white-light px-3.5 py-2 font-semibold text-dark transition hover:bg-primary hover:text-white dark:bg-[#191e3a] dark:text-white-light dark:hover:bg-primary">
+				Sebelumnya
+			</a>
+		</li>
+		{% endif %} {% for pg in page_range %} {% if ptps.number == pg %}
+		<li>
+			<a
+				href="?page={{pg}}"
+				class="flex justify-center rounded bg-white-light px-3.5 py-2 font-semibold text-dark transition hover:bg-primary hover:text-white dark:bg-[#191e3a] dark:text-white-light dark:hover:bg-primary">
+				{{pg}}
+			</a>
+		</li>
+		{% endif %} {% endfor %} {% if ptps.has_next %}
+
+		<li>
+			<a
+				href="?page={{ptps.next_page_number}}"
+				class="flex justify-center rounded bg-white-light px-3.5 py-2 font-semibold text-dark transition hover:bg-primary hover:text-white dark:bg-[#191e3a] dark:text-white-light dark:hover:bg-primary">
+				Selanjutnya
+			</a>
+		</li>
+		{% endif %}
+	</ul>
+</div>
+<!-- script -->
+<script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+<script>
+	document.addEventListener("alpine:init", () => {
+		Alpine.data("modal", (initialOpenState = false) => ({
+			open: initialOpenState,
+
+			toggle() {
+				this.open = !this.open;
+			},
+		}));
+	});
+</script>
+<script>
+	$(document).ready(function () {
+		$("#id_provinsi").change(function () {
+			var provinsiId = $(this).val();
+			$.ajax({
+				url: "../../get_kabkota/",
+				data: { provinsi_id: provinsiId },
+				dataType: "json",
+				success: function (data) {
+					var options = '<option value="">Pilih Kabupaten/Kota</option>';
+					for (var i = 0; i < data.length; i++) {
+						options +=
+							'<option value="' +
+							data[i].id +
+							'">' +
+							data[i].name +
+							"</option>";
+					}
+					$("#id_kabkota").html(options);
+				},
+			});
+		});
+		$("#id_kabkota").change(function () {
+			var kabkotaId = $(this).val();
+			$.ajax({
+				url: "../../get_kecamatan/",
+				data: { kabkota_id: kabkotaId },
+				dataType: "json",
+				success: function (data) {
+					var options = '<option value="">Pilih Kecamatan</option>';
+					for (var i = 0; i < data.length; i++) {
+						options +=
+							'<option value="' +
+							data[i].id +
+							'">' +
+							data[i].name +
+							"</option>";
+					}
+					$("#id_kecamatan").html(options);
+				},
+			});
+		});
+		$("#id_kecamatan").change(function () {
+			var kecamatanId = $(this).val();
+			$.ajax({
+				url: "../../get_keldesa/",
+				data: { kecamatan_id: kecamatanId },
+				dataType: "json",
+				success: function (data) {
+					var options = '<option value="">Pilih Kelurahan/Desa</option>';
+					for (var i = 0; i < data.length; i++) {
+						options +=
+							'<option value="' +
+							data[i].id +
+							'">' +
+							data[i].name +
+							"</option>";
+					}
+					$("#id_keldesa").html(options);
+				},
+			});
+		});
+
+		$("#id_keldesa").change(function () {
+			var keldesaId = $(this).val();
+			$.ajax({
+				url: "../../get_tps/",
+				data: { keldesa_id: keldesaId },
+				dataType: "json",
+				success: function (data) {
+					var options = '<option value="">Pilih Nomor TPS</option>';
+					for (var i = 0; i < data.length; i++) {
+						options +=
+							'<option value="' + data[i].id + '">' + data[i].no + "</option>";
+					}
+					$("#id_tps").html(options);
+				},
+			});
+		});
+	});
+</script>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+<!-- modal -->
+{% load tailwind_filters %}
+<div
+	class="fixed inset-0 z-[999] hidden bg-[black]/60 px-4"
+	:class="open && '!block'">
+	<div
+		class="flex min-h-screen items-start justify-center px-4"
+		@click.self="open = false">
+		<div
+			class="panel my-8 w-full max-w-lg overflow-hidden rounded-lg border-0 p-0">
+			<div
+				class="flex items-center justify-between bg-[#fbfbfb] px-5 py-3 dark:bg-[#121c2c]">
+				<h5 class="text-lg font-bold">Setujui Foto</h5>
+				<button
+					type="button"
+					class="text-white-dark hover:text-dark"
+					@click="cek_status">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="feather feather-x">
+						<line x1="18" y1="6" x2="6" y2="18"></line>
+						<line x1="6" y1="6" x2="18" y2="18"></line>
+					</svg>
+				</button>
+			</div>
+			<div class="p-5">
+				<form
+					class="space-y-5"
+					method="POST"
+					action="{% url 'ptps:WhetherReportView' %}">
+					{% csrf_token %}
+					<p class="text-base">Setujui Foto yang dikirim oleh Pengawas TPS</p>
+					<div>
+						<label for="id_status">Setujui Sekarang</label>
+						{{whether_form.status}}
+					</div>
+
+					<button type="submit" class="btn btn-primary btn-lg w-full">
+						Laporkan Cuaca Terkini
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	document.addEventListener("alpine:init", () => {
+		Alpine.data("cek_status", (initialOpenState = false) => ({
+			open: initialOpenState,
+
+			cek_status() {
+				this.open = !this.open;
+			},
+		}));
+	});
+</script>

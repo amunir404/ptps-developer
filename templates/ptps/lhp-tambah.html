@@ -1,0 +1,230 @@
+{% extends 'ptps/base.html' %} {% load static %}
+
+<!-- Start custom_css -->
+{% block custom_css %}
+<link
+	href="{% static 'vendors/filepond/dist/filepond.css' %} "
+	rel="stylesheet" />
+<link
+	href="{% static 'vendors/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css' %}"
+	rel="stylesheet" />
+
+<style>
+	.filepond--root {
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+			Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+			"Segoe UI Symbol";
+	}
+	.filepond--file-action-button {
+		cursor: pointer;
+	}
+	.filepond--credits {
+		display: none; /* Hide the credit text */
+	}
+</style>
+{% endblock custom_css %}
+<!-- End custom_css -->
+{% block content %}
+<div 
+	class="-m-6 overflow-hidden rounded-none border border-gray-200 bg-white shadow-none lg:m-6 lg:rounded-lg lg:shadow-md">
+	<div class="relative">
+		<div class="flex items-center px-6 py-4">
+			<h3 class="text-xl font-bold md:text-3xl">Laporan Hasil Pengawasan</h3>
+		</div>
+		<div
+			class="bg-gradient-to-l from-indigo-900/20 via-black to-indigo-900/20 opacity-[0.1] dark:via-white"></div>
+		<div class="grid space-y-6 p-6">
+			<div class="flex flex-col sm:flex-row">
+				<label
+					for="id_tahapan"
+					class="mb-2 text-gray-800 sm:w-1/4 sm:ltr:mr-2 rtl:ml-2"
+					>Tahapan yang diawasi</label
+				>
+				{{form.tahapan}}
+			</div>
+			<div class="flex flex-col sm:flex-row">
+				<label
+					for="id_bentuk"
+					class="mb-2 text-gray-800 sm:w-1/4 sm:ltr:mr-2 rtl:ml-2"
+					>Bentuk Kegiatan Pengawasan</label
+				>
+				{{form.bentuk}}
+			</div>
+			<div class="flex flex-col sm:flex-row">
+				<label
+					for="id_tujuan"
+					class="mb-2 text-gray-800 sm:w-1/4 sm:ltr:mr-2 rtl:ml-2"
+					>Tujuan Kegiatan Pengawasan</label
+				>
+
+				{{form.tujuan}}
+			</div>
+			<div class="flex flex-col sm:flex-row">
+				<label
+					for="id_sasaran"
+					class="mb-2 text-gray-800 sm:w-1/4 sm:ltr:mr-2 rtl:ml-2"
+					>Sasaran Kegiatan Pengawasan</label
+				>
+				{{form.sasaran}}
+			</div>
+			<div class="flex flex-col sm:flex-row">
+				<label
+					for="id_waktu"
+					class="mb-2 text-gray-800 sm:w-1/4 sm:ltr:mr-2 rtl:ml-2"
+					>Waktu Kegiatan Pengawasan</label
+				>
+
+				{{form.waktu}}
+			</div>
+			<div class="flex flex-col sm:flex-row">
+				<label
+					for="id_tempat"
+					class="mb-2 text-gray-800 sm:w-1/4 sm:ltr:mr-2 rtl:ml-2"
+					>Tempat Kegiatan Pengawasan</label
+				>
+
+				{{form.tempat}}
+			</div>
+
+			<div class="flex flex-col sm:flex-row">
+				<label
+					for="id_uraian"
+					class="mb-2 text-gray-800 sm:w-1/4 sm:ltr:mr-2 rtl:ml-2"
+					>Uraian Singkat Hasil Pengawasan
+				</label>
+
+				{{form.uraian}}
+			</div>
+			<div class="">
+				<label
+					for="id_image"
+					class="mb-2 text-gray-800 sm:w-1/4 sm:ltr:mr-2 rtl:ml-2"
+					>Upload Foto Pengawasan
+				</label>
+				<input type="file" class="pond form-input flex-1" multiple />
+			</div>
+			<button
+				type="button"
+				id="saveBtn"
+				class="btn btn-primary btn-lg w-full text-lg">
+				Laporkan Sekarang
+			</button>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+<!-- Start custom_js -->
+{% block custom_js %}
+<script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'vendors/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js' %}"></script>
+<script src="{% static 'vendors/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js' %}"></script>
+<script src="{% static 'vendors/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js' %}"></script>
+<script src="{% static 'vendors/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.js' %}"></script>
+<script src="{% static 'vendors/filepond/dist/filepond.js' %}"></script>
+<script src="{% static 'vendors/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js' %}"></script>
+<script src="{% static 'vendors/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js' %}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		var files = [];
+		FilePond.registerPlugin(FilePondPluginImagePreview);
+		FilePond.registerPlugin(FilePondPluginImageExifOrientation);
+		FilePond.registerPlugin(FilePondPluginFileValidateSize);
+		FilePond.registerPlugin(FilePondPluginFileValidateType);
+		FilePond.registerPlugin(FilePondPluginImageResize);
+		FilePond.registerPlugin(FilePondPluginImageTransform);
+		FilePond.setOptions({
+			allowMultiple: true,
+			maxFiles: 20,
+			maxFileSize: "10MB",
+		});
+
+		const inputElement = document.querySelector('input[type="file"]');
+		const pond = FilePond.create(inputElement, {
+			acceptedFileTypes: ["image/png", "image/jpeg"],
+			imageResizeTargetWidth: 600,
+			imageCropAspectRatio: 1,
+			imageTransformVariants: {
+				thumb_medium_: (transforms) => {
+					transforms.resize = {
+						size: {
+							width: 384,
+							height: 384,
+						},
+					};
+					return transforms;
+				},
+			},
+			onaddfile: (err, fileItem) => {
+				if (!err) {
+					files.push(fileItem.file);
+				}
+				console.log(files);
+			},
+			onremovefile: (err, fileItem) => {
+				const index = files.indexOf(fileItem.file);
+				if (index > -1) {
+					files.splice(index, 1);
+				}
+				console.log(files);
+			},
+		});
+
+		var formData = new FormData();
+		$(document).on("click", "#saveBtn", function (e) {
+			if (
+				$("#id_tahapan").val() === "" ||
+				$("#id_bentuk").val() === "" ||
+				$("#id_tujuan").val() === "" ||
+				$("#id_sasaran").val() === "" ||
+				$("#id_waktu").val() === "" ||
+				$("#id_tempat").val() === "" ||
+				$("#id_uraian").val() === ""
+			) {
+				swal("Maaf!", "Ada bagian yang belum di isi", "error");
+				return; // Prevent form submission
+			}
+
+			formData.append("length", files.length);
+			formData.append("tahapan", $("#id_tahapan").val());
+			formData.append("bentuk", $("#id_bentuk").val());
+			formData.append("tujuan", $("#id_tujuan").val());
+			formData.append("sasaran", $("#id_sasaran").val());
+			formData.append("waktu", $("#id_waktu").val());
+			formData.append("tempat", $("#id_tempat").val());
+			formData.append("uraian", $("#id_uraian").val());
+			for (var i = 0; i < files.length; i++) {
+				formData.append("images" + i, files[i]);
+			}
+			formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+
+			$.ajax({
+				type: "POST",
+				url: '{% url "ptps:LhpAddView" %}',
+				data: formData,
+				cache: false,
+				processData: false,
+				contentType: false,
+				enctype: "multipart/form-data",
+				success: function () {
+					swal({
+						title: "Selamat!",
+						text: "Anda Sudah membuat LHP",
+						icon: "success",
+					}).then(function () {
+						window.location.href = '{% url "ptps:LhpView" %}';
+					});
+				},
+
+				error: function (xhr, errmsg, err) {
+					console.log(xhr.status + ":" + xhr.responseText);
+				},
+			});
+		});
+	});
+</script>
+{% endblock custom_js %}
+
+<!-- End custom_js -->

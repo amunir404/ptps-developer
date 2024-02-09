@@ -1,0 +1,367 @@
+{% extends 'ptps/base.html' %} {% load static %}
+
+<!-- Start custom_css -->
+{% block custom_css %}
+
+<link
+	href="{% static 'vendors/filepond/dist/filepond.css' %} "
+	rel="stylesheet" />
+
+<style>
+	.filepond--root {
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+			Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+			"Segoe UI Symbol";
+	}
+	.filepond--file-action-button {
+		cursor: pointer;
+	}
+	.filepond--credits {
+		display: none; /* Hide the credit text */
+	}
+</style>
+<link rel="stylesheet" href="{% static 'vendors/fancybox/fancybox.css' %}" />
+{% endblock custom_css %}
+
+<!-- End custom_css -->
+{% block content %}
+<div class="flex flex-wrap items-center justify-between gap-4">
+	<h2 class="text-xl font-bold md:text-3xl">{{title_page}}</h2>
+	{% if cek_status.count < 3 %} {% else %}
+	<div class="btn btn-danger rounded-md lg:hidden">
+		<b
+			>Foto yang Kamu upload hanya boleh 3 foto, jika terdapat kesalahan
+			silahkan hapus salah satu foto</b
+		>
+	</div>
+	{% endif %} {% if cek_status %}
+	<div
+		class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
+		<div class="flex gap-3">
+			<div class="mb-5">
+				<div class="flex items-center justify-center" x-data="modal">
+					{% if cek_status.count < 3 %}
+					<button
+						@click="toggle"
+						class="btn btn-primary fixed bottom-6 z-20 mb-20 lg:relative lg:bottom-0 lg:mb-2 lg:flex ltr:right-6 rtl:left-6">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="feather feather-plus">
+							<line x1="12" y1="5" x2="12" y2="19"></line>
+							<line x1="5" y1="12" x2="19" y2="12"></line>
+						</svg>
+						Kurang {% if count_foto > 0 %} {{count_foto}} {% else %} {% endif %}
+						Foto, Tambah Lagi
+					</button>
+					{% else %}
+					<button
+						type="button"
+						disabled
+						class="btn btn-primary btn btn-primary bottom-0 mb-20 hidden disabled:cursor-not-allowed disabled:border-primary-300 disabled:bg-primary-300 lg:relative lg:mb-2 lg:flex ltr:right-6 rtl:left-6">
+						Foto Sudah Max {{perolehan.count}}, Tidak dapat menambahkan, jika
+						ingin menambahkan silahkan hapus salah satu foto
+					</button>
+
+					{% endif %}
+
+					<div
+						class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60"
+						:class="open && '!block'">
+						<div class="flex min-h-screen items-start justify-center px-4">
+							<div
+								x-show="open"
+								x-transition
+								x-transition.duration.300
+								class="panel my-8 w-full max-w-lg overflow-hidden rounded-lg border-0 p-0">
+								<div
+									class="flex items-center justify-between bg-[#fbfbfb] px-5 py-3 dark:bg-[#121c2c]">
+									<div class="text-lg font-bold">Tambah Foto</div>
+									<button
+										type="button"
+										class="text-white-dark hover:text-dark"
+										@click="toggle">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="24px"
+											height="24px"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="1.5"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											class="h-6 w-6">
+											<line x1="18" y1="6" x2="6" y2="18"></line>
+											<line x1="6" y1="6" x2="18" y2="18"></line>
+										</svg>
+									</button>
+								</div>
+								<div class="p-5">
+									<div
+										class="text-base font-medium text-[#1f2937] dark:text-white-dark/70">
+										<div class="grid space-y-3 p-3">
+											<div class="">
+												<label
+													for="id_image2"
+													class="mb-2 text-gray-800 sm:w-1/4 sm:ltr:mr-2 rtl:ml-2"
+													>Upload Foto
+												</label>
+												<input
+													type="file"
+													id="id_image2"
+													class="form-input flex-1"
+													multiple />
+											</div>
+											<button
+												type="button"
+												id="saveBtn"
+												class="btn btn-primary btn-lg w-full text-lg">
+												Upload Sekarang
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{% else %} {% endif %}
+</div>
+<div
+	class="-m-6 overflow-hidden rounded-none border border-gray-200 bg-white shadow-none lg:m-6 lg:rounded-lg lg:shadow-md">
+	<div class="relative my-10">
+		{% if cek_status %}
+		<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+			{% for item in cek_status %}
+			<div class="m-10">
+				<div class="relative md:col-span-2 md:row-span-2">
+					<img
+						src="{{item.media.images.url}}"
+						alt="cperolehan"
+						class="h-96 w-full rounded-md object-cover" />
+					<div class="absolute inset-0 z-10 bg-gradient-to-t from-black"></div>
+					<div class="absolute inset-x-0 bottom-0 z-10 space-y-2 p-4">
+						<button
+							data-fancybox="gallery"
+							data-src="{{item.media.images.url}}"
+							data-caption="Foto ke {{forloop.counter}}"
+							data-src="#cek"
+							class="btn btn-secondary w-full">
+							Lihat Foto
+						</button>
+						{% if item.status %}
+						<button
+							disabled
+							class="w-full rounded-lg border border-green-500 bg-green-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-green-700 hover:bg-green-700 focus:ring focus:ring-green-200 disabled:cursor-not-allowed disabled:border-green-300 disabled:bg-green-300">
+							Sudah dicek Panwascam
+						</button>
+						{% else %}
+						<a
+							href="{% url 'ptps:PerolehanPresidenDeleteView' item.media.id %}"
+							class="btn btn-danger w-full">
+							Hapus untuk Ganti
+						</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+
+			{% endfor %}
+		</div>
+
+		{% else %}
+		<div
+			class="bg-gradient-to-l from-indigo-900/20 via-black to-indigo-900/20 opacity-[0.1] dark:via-white"></div>
+
+		<div class="grid space-y-6 p-6">
+			<div class="">
+				<label
+					for="id_image1"
+					class="mb-2 text-gray-800 sm:w-1/4 sm:ltr:mr-2 rtl:ml-2"
+					>Upload Foto
+				</label>
+				<input type="file" id="id_image1" class="form-input flex-1" multiple />
+			</div>
+			<button
+				type="button"
+				id="saveBtn"
+				class="btn btn-primary btn-lg w-full text-lg">
+				Upload Sekarang
+			</button>
+		</div>
+		{% endif %}
+	</div>
+</div>
+
+{% endblock %}
+<!-- Start custom_js -->
+{% block custom_js %}
+
+<script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'vendors/fancybox/fancybox.umd.js' %}"></script>
+<script src="{% static 'vendors/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js' %}"></script>
+<script src="{% static 'vendors/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js' %}"></script>
+<script src="{% static 'vendors/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js' %}"></script>
+<script src="{% static 'vendors/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.js' %}"></script>
+<script src="{% static 'vendors/filepond/dist/filepond.js' %}"></script>
+<script src="{% static 'vendors/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js' %}"></script>
+<script src="{% static 'vendors/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js' %}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		var files = [];
+		FilePond.registerPlugin(FilePondPluginImageResize);
+		FilePond.registerPlugin(FilePondPluginImageExifOrientation);
+		FilePond.registerPlugin(FilePondPluginFileValidateSize);
+		FilePond.registerPlugin(FilePondPluginFileValidateType);
+		FilePond.registerPlugin(FilePondPluginImageResize);
+		FilePond.registerPlugin(FilePondPluginImageTransform);
+		FilePond.setOptions({
+			allowMultiple: true,
+			maxFiles: {{count_foto}},
+			maxFileSize: "20MB",
+		});
+
+		const inputElementer = document.querySelector('[id="id_image1"]');
+		const pond = FilePond.create(inputElementer, {
+			acceptedFileTypes: ["image/png", "image/jpeg"],
+			imageTransformVariants: {
+				thumb_medium_: (transforms) => {
+					transforms.resize = {
+						size: {
+							width: 384,
+							height: 384,
+						},
+					};
+					return transforms;
+				},
+			},
+			onaddfile: (err, fileItem) => {
+				if (!err) {
+					files.push(fileItem.file);
+				}
+				console.log(files);
+			},
+			onremovefile: (err, fileItem) => {
+				const index = files.indexOf(fileItem.file);
+				if (index > -1) {
+					files.splice(index, 1);
+				}
+				console.log(files);
+			},
+		});
+
+		const inputElement = document.querySelector('[id="id_image2"]');
+		const pond2 = FilePond.create(inputElement, {
+			acceptedFileTypes: ["image/png", "image/jpeg"],
+			imageTransformVariants: {
+				thumb_medium_: (transforms) => {
+					transforms.resize = {
+						size: {
+							width: 384,
+							height: 384,
+						},
+					};
+					return transforms;
+				},
+			},
+			onaddfile: (err, fileItem) => {
+				if (!err) {
+					files.push(fileItem.file);
+				}
+				console.log(files);
+			},
+			onremovefile: (err, fileItem) => {
+				const index = files.indexOf(fileItem.file);
+				if (index > -1) {
+					files.splice(index, 1);
+				}
+				console.log(files);
+			},
+		});
+
+		var formData = new FormData();
+		$(document).on("click", "#saveBtn", function (e) {
+			if (files.length === 0) {
+				// Tampilkan alert jika tidak ada gambar yang diupload
+				swal(
+					"Peringatan!",
+					"Anda harus mengupload gambar terlebih dahulu.",
+					"warning",
+				);
+				return;
+			}
+			formData.append("length", files.length);
+			for (var i = 0; i < files.length; i++) {
+				formData.append("images" + i, files[i]);
+			}
+			formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+
+			$.ajax({
+				type: "POST",
+				url: '{% url "ptps:PerolehanPresidenView" %}',
+				data: formData,
+				cache: false,
+				processData: false,
+				contentType: false,
+				enctype: "multipart/form-data",
+				success: function () {
+					swal({
+						title: "Selamat!",
+						text: "Laporan C.HASIL-PPWP Telah Ditambahkan",
+						icon: "success",
+					}).then(function () {
+						window.location.href = '{% url "ptps:PerolehanPresidenView" %}';
+					});
+				},
+
+				error: function (xhr, errmsg, err) {
+					console.log(xhr.status + ":" + xhr.responseText);
+				},
+			});
+		});
+	});
+</script>
+<script>
+	Fancybox.bind('[data-fancybox="gallery"]', {
+		Hash: false,
+		Thumbs: false,
+		compact: false,
+		contentClick: "toggleCover",
+		Toolbar: {
+			display: {
+				left: ["infobar"],
+				middle: [],
+				right: ["download", "thumbs", "close"],
+			},
+		},
+	});
+</script>
+<script>
+	document.addEventListener("alpine:init", () => {
+		Alpine.data("modal", (initialOpenState = false) => ({
+			open: initialOpenState,
+
+			toggle() {
+				this.open = !this.open;
+			},
+		}));
+	});
+</script>
+
+{% endblock custom_js %}
+
+<!-- End custom_js -->

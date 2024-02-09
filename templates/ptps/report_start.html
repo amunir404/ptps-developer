@@ -1,0 +1,140 @@
+<!-- modal -->
+{% load tailwind_filters %}
+<div
+	class="fixed inset-0 z-[999] hidden bg-[black]/60 px-4"
+	:class="open && '!block'">
+	<div
+		class="flex min-h-screen items-start justify-center px-4"
+		@click.self="open = false">
+		<div
+			class="panel my-8 w-full max-w-lg overflow-hidden rounded-lg border-0 p-0">
+			<div
+				class="flex items-center justify-between bg-[#fbfbfb] px-3 py-3 dark:bg-[#121c2c]">
+				<h5 class="text-lg font-bold">Lapor Mulai Pemungutan</h5>
+				<button
+					type="button"
+					class="text-white-dark hover:text-dark"
+					@click="report_start">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="feather feather-x">
+						<line x1="18" y1="6" x2="6" y2="18"></line>
+						<line x1="6" y1="6" x2="18" y2="18"></line>
+					</svg>
+				</button>
+			</div>
+			<div class="p-5">
+				<!-- Jika Statusnya Sudah Dimulai -->
+				{% if start.start_date %}
+				<div class="table-responsive">
+					<table class="table-striped">
+						<tbody>
+							<tr>
+								<td class="whitespace-nowrap">Provinsi</td>
+								<td>{{user_pengawas_tps.provinsi}}</td>
+							</tr>
+							<tr>
+								<td class="whitespace-nowrap">Kabupaten/Kota</td>
+								<td>{{user_pengawas_tps.kabkota}}</td>
+							</tr>
+							<tr>
+								<td class="whitespace-nowrap">Kecamatan</td>
+								<td>{{user_pengawas_tps.kecamatan}}</td>
+							</tr>
+							<tr>
+								<td class="whitespace-nowrap">Kelurahan/Desa</td>
+								<td>{{user_pengawas_tps.keldesa}}</td>
+							</tr>
+							<tr>
+								<td class="whitespace-nowrap">No TPS</td>
+								<td>{{user_pengawas_tps.tps}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- Jika Statusnya Sudah Berakhir -->
+				{% if end.end_date %}
+				<p class="p-5 text-center text-xl text-danger-500">
+					Proses pemungutan suara telah <strong>Berakhir</strong>
+				</p>
+				<!-- Jika Statusnya Telah dimulai tapi belum berakhir -->
+				{% else %}
+				<p class="p-5 text-center text-xl text-danger-500">
+					Proses pemungutan suara telah <strong>dimulai</strong>
+				</p>
+				{% endif %}
+				<!-- Jika Statusnya belum dimulai -->
+				{% else %}
+				<!-- Jika Statusnya Sudah Berakhir tapi belum klik mulai -->
+				{% if end.end_date %}
+				<div class="table-responsive">
+					<table class="table-striped">
+						<tbody>
+							<tr>
+								<td class="whitespace-nowrap">Provinsi</td>
+								<td>{{user_pengawas_tps.provinsi}}</td>
+							</tr>
+							<tr>
+								<td class="whitespace-nowrap">Kabupaten/Kota</td>
+								<td>{{user_pengawas_tps.kabkota}}</td>
+							</tr>
+							<tr>
+								<td class="whitespace-nowrap">Kecamatan</td>
+								<td>{{user_pengawas_tps.kecamatan}}</td>
+							</tr>
+							<tr>
+								<td class="whitespace-nowrap">Kelurahan/Desa</td>
+								<td>{{user_pengawas_tps.keldesa}}</td>
+							</tr>
+							<tr>
+								<td class="whitespace-nowrap">No TPS</td>
+								<td>{{user_pengawas_tps.tps}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<p class="p-5 text-center text-xl text-danger-500">
+					Proses pemungutan suara telah <strong>Berakhir</strong>
+				</p>
+				<!-- Jika Statusnya Telah dimulai tapi belum berakhir -->
+				{% else %}
+				<form
+					class="space-y-5"
+					method="POST"
+					action="{% url 'ptps:StartReportView' %}">
+					{% csrf_token %}
+					<p class="text-justify text-xl">
+						Ketika anda klik tombol <strong>Laporkan</strong>.Status Proses
+						pemungutan suara di TPS {{user_pengawas_tps.tps}} Desa
+						{{user_pengawas_tps.keldesa}} Kecamatan
+						{{user_pengawas_tps.kecamatan}} Kabupaten
+						{{user_pengawas_tps.kabkota}} akan
+						<strong>dimulai</strong>
+					</p>
+
+					<button type="submit" class="btn btn-primary w-full">Laporkan</button>
+				</form>
+				{% endif %} {% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	document.addEventListener("alpine:init", () => {
+		Alpine.data("report_start", (initialOpenState = false) => ({
+			open: initialOpenState,
+
+			report_start() {
+				this.open = !this.open;
+			},
+		}));
+	});
+</script>

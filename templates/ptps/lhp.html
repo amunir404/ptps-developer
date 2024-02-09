@@ -1,0 +1,108 @@
+{% extends 'ptps/base.html' %} {% load static %} {% block content %}
+<!-- LHP List -->
+{% if lhp_list %}
+<div class="flex flex-wrap items-center justify-between gap-4">
+	<h2 class="text-xl font-bold md:text-3xl">{{title_page}}</h2>
+	<div
+		class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
+		<div class="flex gap-3">
+			<div class="mb-5">
+				<div class="flex items-center justify-center">
+					<a
+						href="{% url 'ptps:LhpAddView' %}"
+						class="btn btn-primary fixed bottom-6 mb-20 lg:relative lg:bottom-0 lg:mb-2 lg:flex ltr:right-6 rtl:left-6">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="feather feather-plus">
+							<line x1="12" y1="5" x2="12" y2="19"></line>
+							<line x1="5" y1="12" x2="19" y2="12"></line>
+						</svg>
+						Tambah LHP
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div
+	class="-m-6 overflow-hidden rounded-none border border-gray-200 bg-white shadow-none lg:m-6 lg:rounded-lg lg:shadow-md">
+	<table
+		class="w-full border-collapse bg-white text-left text-sm text-gray-500">
+		<thead class="hidden bg-gray-50">
+			<tr>
+				<th scope="col" class="px-6 py-4 font-medium text-gray-900">Tahapan</th>
+				<th
+					scope="col"
+					class="flex justify-center px-6 py-4 font-medium text-gray-900">
+					Status
+				</th>
+			</tr>
+		</thead>
+		<tbody class="divide-y divide-gray-100 border-t border-gray-100">
+			{% for item in lhp_list %}
+			<tr class="hover:bg-gray-50">
+				<th class="flex gap-3 px-6 py-4 font-normal text-gray-900">
+					<div class="relative h-10 w-10">
+						<img
+							class="h-full w-full rounded-full object-cover object-center"
+							src="{% static 'images/logo-bawaslu.svg' %}"
+							alt="" />
+					</div>
+					<div class="text-sm">
+						<div class="font-medium text-gray-700">
+							{{item.get_tahapan_display }}
+						</div>
+						<div class="text-gray-400">{{ item.waktu }}</div>
+					</div>
+				</th>
+
+				<td class="px-6 py-4">
+					<div class="flex justify-center gap-4">
+						<a
+							href="{% url 'ptps:LhpDeleteView' item.id %}"
+							class="text-danger-500"
+							>Hapus</a
+						>
+						<a href="" class="text-primary-500">Download</a>
+					</div>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% else %}
+<div class="relative flex items-center justify-center overflow-hidden">
+	<div
+		class="text-center font-semibold before:container before:absolute before:left-1/2 before:aspect-square before:-translate-x-1/2 before:rounded-full before:bg-[linear-gradient(180deg,#4361EE_0%,rgba(67,97,238,0)_50.73%)] before:opacity-10">
+		<div class="relative">
+			<img
+				:src="$store.app.theme === 'dark' || $store.app.isDarkMode ? '{% static 'images/error/maintenence-dark.svg'%}' : '{% static 'images/error/maintenence-light.svg'%}'"
+				alt="maintenence"
+				class="mx-auto w-full max-w-xs object-cover md:max-w-lg" />
+			<div class="font-semibold dark:text-white">
+				<h2 class="mb-5 text-3xl font-bold text-primary md:text-5xl">
+					Belum Ada {{title_page}}
+				</h2>
+
+				<p class="text-base">
+					Ayo Segera Isi, Kamu belum punya Laporan Hasil Pengawasan,
+				</p>
+			</div>
+			<a
+				href="{% url 'ptps:LhpAddView' %}"
+				class="btn btn-primary mx-auto !mt-7 w-max border-0 uppercase shadow-none"
+				>Tambah LHP</a
+			>
+		</div>
+	</div>
+</div>
+{% endif %} {% endblock %}

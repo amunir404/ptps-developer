@@ -1,0 +1,244 @@
+{% extends 'bawaslu/base.html' %} {% load static %} {% block content %}
+<!--Load Tailwind-->
+{% load tailwind_filters %} {% block custom_css %}
+<link rel="stylesheet" href="{% static 'vendors/fancybox/fancybox.css' %}" />
+{% endblock custom_css %}
+<div>
+	<div class="pt-5">
+		<div class="mb-5 grid grid-cols-1 gap-5 lg:grid-cols-3 xl:grid-cols-4">
+			<div class="panel">
+				<div class="mb-5 flex items-center justify-between">
+					<h5 class="text-lg font-semibold dark:text-white-light">
+						Profile Pengawas
+					</h5>
+				</div>
+				<div class="mb-5">
+					<div class="flex flex-col items-center justify-center">
+						<div class="flex flex-col items-center justify-center">
+							{% if user.profile.avatar %}
+							<img
+								src="{% static 'images/profile-34.jpeg' %}"
+								alt="image"
+								class="mb-5 h-24 w-24 rounded-full object-cover" />
+
+							{% else %}
+							<img
+								class="mb-5 h-24 w-24 rounded-full object-cover"
+								src="https://ui-avatars.com/api/?name={{ user.fullname|urlencode }}&background=random"
+								alt="user" />
+							{% endif %}
+							<p class="text-xl font-semibold text-primary">
+								{{pengawas.user.fullname}}
+							</p>
+						</div>
+						<div class="mt-5">
+							<table
+								class="w-full border-collapse border border-gray-200 bg-white text-left text-sm text-gray-500">
+								<tbody
+									class="divide-y divide-gray-100 border-t border-gray-100">
+									<tr>
+										<th class="px-6 py-4 font-medium text-gray-900">
+											Jenis Kelamin
+										</th>
+										<td class="px-6 py-4">
+											{{pengawas.user.profile.get_jk_display}}
+										</td>
+									</tr>
+									<tr>
+										<th class="px-6 py-4 font-medium text-gray-900">
+											Alamat Lengkap
+										</th>
+										<td class="px-6 py-4">{{pengawas.user.profile.alamat}}</td>
+									</tr>
+									<tr>
+										<th class="px-6 py-4 font-medium text-gray-900">RT / RW</th>
+										<td class="px-6 py-4">
+											{{pengawas.user.profile.rt}} /
+											{{pengawas.user.profile.rw}}
+										</td>
+									</tr>
+									<tr>
+										<th class="px-6 py-4 font-medium text-gray-900">No Hp</th>
+										<td class="px-6 py-4">{{pengawas.user.profile.wa}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="mt-5">
+							<h2 class="mb-1 text-xl font-bold">Wilayah Pengawasan</h2>
+							<table
+								class="w-full border-collapse border border-gray-200 bg-white text-left text-sm text-gray-500">
+								<tbody
+									class="divide-y divide-gray-100 border-t border-gray-100">
+									<tr>
+										<th class="px-6 py-4 font-medium text-gray-900">
+											Provinsi
+										</th>
+										<td class="px-6 py-4">
+											{{pengawas.user.userpengawastps.provinsi}}
+										</td>
+									</tr>
+									<tr>
+										<th class="px-6 py-4 font-medium text-gray-900">
+											Kabupaten / Kota
+										</th>
+										<td class="px-6 py-4">
+											{{pengawas.user.userpengawastps.kabkota}}
+										</td>
+									</tr>
+									<tr>
+										<th class="px-6 py-4 font-medium text-gray-900">
+											Kecamatan
+										</th>
+										<td class="px-6 py-4">
+											{{pengawas.user.userpengawastps.kecamatan}}
+										</td>
+									</tr>
+									<tr>
+										<th class="px-6 py-4 font-medium text-gray-900">
+											Kelurahan/Desa
+										</th>
+										<td class="px-6 py-4">
+											{{pengawas.user.userpengawastps.keldesa}}
+										</td>
+									</tr>
+									<tr>
+										<th class="px-6 py-4 font-medium text-gray-900">No TPS</th>
+										<td class="px-6 py-4">
+											{{pengawas.user.userpengawastps.tps}}
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="mt-5">
+							<table
+								class="w-full border-collapse border border-gray-200 bg-white text-left text-sm text-gray-500">
+								<tbody
+									class="divide-y divide-gray-100 border-t border-gray-100">
+									<tr>
+										<th class="px-6 py-4 font-medium text-gray-900">
+											Status Cuaca
+										</th>
+										<td class="px-6 py-4">{{whether.get_status_display}}</td>
+									</tr>
+									<tr>
+										<th class="px-6 py-4 font-medium text-gray-900">
+											Status Mulai
+										</th>
+										<td class="px-6 py-4">
+											{% if end.end_date %} Berakhir {% else %}
+											<!-- Jika Statusnya -->
+											{% if start.start_date%} Mulai {% else %} Belum Mulai
+											<!-- Jika Statusnya -->
+											{% endif %} {%endif %}
+										</td>
+									</tr>
+									<tr>
+										<th class="px-6 py-4 font-medium text-gray-900">
+											Status Selesai
+										</th>
+										<td class="px-6 py-4">
+											{% if end.end_date %} Berakhir {% else %} Belum Selesai
+											{%endif %}
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel lg:col-span-2 xl:col-span-3">
+				<div class="mb-5">
+					<h5 class="text-lg font-semibold dark:text-white-light">
+						C.HASIL-DPD
+					</h5>
+				</div>
+				{% if media %}
+				<div class="mb-5">
+					<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+						{% for item in media %}
+						<div class="m-10">
+							<div
+								class="relative md:col-span-2 md:row-span-2"
+								x-data="cek_status">
+								<img
+									src="{{item.media.images.url}}"
+									alt="cperolehan"
+									class="h-96 w-full rounded-md object-cover" />
+								<div
+									class="absolute inset-0 z-10 bg-gradient-to-t from-black"></div>
+								<div class="absolute inset-x-0 bottom-0 z-10 space-y-2 p-4">
+									<button
+										data-fancybox="gallery"
+										data-src="{{item.media.images.url}}"
+										data-caption="Foto ke {{forloop.counter}}"
+										data-src="#cek"
+										class="btn btn-secondary w-full">
+										Lihat Foto
+									</button>
+									{% if item.status %}
+									<button
+										disabled
+										class="w-full rounded-lg border border-green-500 bg-green-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-green-700 hover:bg-green-700 focus:ring focus:ring-green-200 disabled:cursor-not-allowed disabled:border-green-300 disabled:bg-green-300">
+										Sudah dicek Bawaslu
+									</button>
+									{% else %}
+									<button class="btn btn-danger w-full" @click="cek_status">
+										Belum dicek Panwascam
+									</button>
+									<!-- Perolehan -->
+									{% endif %}
+									<!-- Perolehan -->
+								</div>
+								{% include "bawaslu/perolehan-dpdri/cek-status.html" %}
+							</div>
+						</div>
+
+						{% endfor %}
+					</div>
+				</div>
+				{% else %}
+				<div class="relative flex items-center justify-center overflow-hidden">
+					<div
+						class="text-center font-semibold before:container before:absolute before:left-1/2 before:aspect-square before:-translate-x-1/2 before:rounded-full before:bg-[linear-gradient(180deg,#4361EE_0%,rgba(67,97,238,0)_50.73%)] before:opacity-10">
+						<div class="relative">
+							<img
+								:src="$store.app.theme === 'dark' || $store.app.isDarkMode ? '{% static 'images/error/maintenence-dark.svg'%}' : '{% static 'images/error/maintenence-light.svg'%}'"
+								alt="maintenence"
+								class="mx-auto w-full max-w-xs object-cover md:max-w-lg" />
+							<div class="font-semibold dark:text-white">
+								<h2 class="mb-5 text-3xl font-bold text-primary md:text-5xl">
+									Belum Ada {{title_page}}
+								</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %} {% block custom_js %}
+<script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'vendors/fancybox/fancybox.umd.js' %}"></script>
+<script>
+	Fancybox.bind('[data-fancybox="gallery"]', {
+		Hash: false,
+		Thumbs: false,
+		compact: false,
+		contentClick: "toggleCover",
+		Toolbar: {
+			display: {
+				left: ["infobar"],
+				middle: [],
+				right: ["zoom", "download", "thumbs", "close"],
+			},
+		},
+	});
+</script>
+<!-- script -->
+
+{% endblock custom_js %}

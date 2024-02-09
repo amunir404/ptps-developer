@@ -1,0 +1,52 @@
+{% load static %}{% load tailwind_filters %}
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+	<head>
+		<!-- Start Meta -->
+		{% include "components/meta.html" %}
+		<!-- End Meta -->
+		<!-- Start compress css -->
+
+		<!-- Start extraup_css -->
+		{% block extraup_css %}{% endblock extraup_css %}
+		<!-- End extraup_css -->
+		<!-- Start extradown_css -->
+		{% block extradown_css %}{% endblock extradown_css %}
+		<!-- End extradown_css -->
+		<!-- Start custom_css -->
+		{% block custom_css %}{% endblock custom_css %}
+		<!-- End custom_css -->
+
+		<link
+			defer
+			rel="stylesheet"
+			type="text/css"
+			media="screen"
+			href="{% static 'css/animate.css' %}" />
+		<link
+			rel="stylesheet"
+			type="text/css"
+			media="screen"
+			href="{% static 'css/main.css' %}" />
+		<link
+			rel="stylesheet"
+			type="text/css"
+			media="screen"
+			href="{% static 'css/global.css' %}" />
+
+		<script defer src="{% static 'js/popper.min.js' %}"></script>
+	</head>
+	<body
+		x-data="main"
+		class="relative overflow-x-hidden font-nunito text-sm font-normal antialiased"
+		:class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme === 'dark' || $store.app.isDarkMode ?  'dark' : '', $store.app.menu, $store.app.layout,$store.app.rtlClass]">
+		<!-- screen loader -->
+		{% include "components/screen-loader.html" %}
+		<div class="main-container min-h-screen text-black dark:text-white-dark">
+			{% block content %} {% endblock %}
+		</div>
+		<script src="{% static 'app.bundle.js' %}" type="module"></script>
+
+		<script defer src="{% static 'js/alpine-ui.min.js' %}"></script>
+	</body>
+</html>
