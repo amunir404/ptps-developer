@@ -31,6 +31,7 @@ odfpy==1.4.1
 openpyxl==3.1.2
 Pillow==10.1.0
 psycopg2==2.9.9
+psycopg2-binary==2.9.9
 python-dotenv==1.0.0
 PyYAML==6.0.1
 ratelim==0.1.6
