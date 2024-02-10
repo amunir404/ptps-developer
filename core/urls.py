@@ -37,4 +37,8 @@ urlpatterns = [
     path("get_kecamatan/", views.get_kecamatan, name="get_kecamatan"),
     path("get_keldesa/", views.get_keldesa, name="get_keldesa"),
     path("get_tps/", views.get_tps, name="get_tps"),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]   
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_URL)
